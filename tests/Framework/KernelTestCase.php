@@ -3,6 +3,7 @@
 namespace App\Tests\Framework;
 
 use App\Entity\User;
+use App\Entity\WishList;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase as BaseKernelTestCase;
 
 class KernelTestCase extends BaseKernelTestCase
@@ -23,21 +24,26 @@ class KernelTestCase extends BaseKernelTestCase
     }
 
     /**
-     * Assert that an user entity has a validation error and return the error message if exists
+     * Assert that an entity has a validation error and return the error message if exists
      * 
-     * @param User $user
+     * @param Object $object
      * @param integer $numberOfExpectedErrors
      * @return string|null Constraint violation message
      */
-    protected function assertHasError(User $user, int $numberOfExpectedErrors = 1): ?string
+    protected function assertHasError(Object $object, int $numberOfExpectedErrors = 1): ?string
     {
-        $errors = $this->validator->validate($user);
+        $errors = $this->validator->validate($object);
 
         $this->assertCount($numberOfExpectedErrors, $errors);
 
         return $errors->count() ? $errors->get(0)->getMessage() : null;
     }
 
+    /**
+     * Create a new user entity with valid values
+     *
+     * @return User
+     */
     protected function getValidUserEntity()
     {
         return (new User)
@@ -45,6 +51,18 @@ class KernelTestCase extends BaseKernelTestCase
             ->setFirstname('john')
             ->setLastname('DOE')
             ->setPassword('1!Abcdef');
+    }
+
+    /**
+     * Create a new wishlist entity with valid values
+     *
+     * @return WishList
+     */
+    protected function getValidWishListEntity()
+    {
+        return (new WishList)
+            ->setTitle('Title test')
+            ->setDescription('Just a simple description to test the entity.');
     }
 
     protected function teardown(): void

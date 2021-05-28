@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\WishListRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=WishListRepository::class)
@@ -20,11 +21,14 @@ class WishList
 
     /**
      * @ORM\Column(type="string", length="255")
+     * @Assert\NotBlank(message="Veuillez choisir un titre pour votre liste.")
+     * @Assert\Length(max=255,maxMessage="Veuillez choisir un titre moins long.")
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length="255", nullable=true)
+     * @Assert\Length(max=255,maxMessage="Veuillez choisir une description moins long.")
      */
     private $description;
 
