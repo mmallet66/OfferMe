@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
+ * @UniqueEntity(fields = {"email"},message ="Cette adresse email est déjà utilisée.")
  */
 class User implements UserInterface
 {
@@ -21,6 +24,8 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank(message="Veuillez saisir une adresse email.")
+     * @Assert\Email(message = "Veuillez saisir une adresse email valide.")
      */
     private $email;
 
@@ -36,19 +41,31 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=50)
+     * @Assert\NotBlank(message="Veuillez saisir votre prénom.")
+     * @Assert\Length(max=50, maxMessage="Votre prénom doit contenir moins de {{ limit }} caractères.")
+     * @Assert\Regex(
+     *      pattern="/^[a-zéèçà]{2,50}(-| )?([a-zéèçà]{2,50})?$/i",
+     *      message="Votre prénom ne peut contenir que des lettres, espaces ou trait d'union (-)."
+     * )
      */
     private $firstname;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=50)
+     * @Assert\NotBlank(message="Veuillez saisir votre nom.")
+     * @Assert\Length(max=50, maxMessage="Votre nom doit contenir moins de {{ limit }} caractères.")
+     * @Assert\Regex(
+     *      pattern="/^[a-zéèçà]{2,50}(-| )?([a-zéèçà]{2,50})?$/i",
+     *      message="Votre nom ne peut contenir que des lettres, espaces ou trait d'union (-)."
+     * )
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isVerified;
+    private $isVerified = false;
 
     public function getId(): ?int
     {
