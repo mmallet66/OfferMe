@@ -54,6 +54,12 @@ class Wish
      */
     private $isOffered = false;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=WishList::class, inversedBy="wishes")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $wishlist;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -127,6 +133,18 @@ class Wish
     public function setIsOffered(bool $isOffered): self
     {
         $this->isOffered = $isOffered;
+
+        return $this;
+    }
+
+    public function getWishlist(): ?WishList
+    {
+        return $this->wishlist;
+    }
+
+    public function setWishlist(?WishList $wishlist): self
+    {
+        $this->wishlist = $wishlist;
 
         return $this;
     }
