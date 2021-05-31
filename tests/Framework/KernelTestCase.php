@@ -3,6 +3,7 @@
 namespace App\Tests\Framework;
 
 use App\Entity\User;
+use App\Entity\Wish;
 use App\Entity\WishList;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase as BaseKernelTestCase;
 
@@ -40,11 +41,11 @@ class KernelTestCase extends BaseKernelTestCase
     }
 
     /**
-     * Create a new user entity with valid values
+     * Create a new User entity with valid values
      *
      * @return User
      */
-    protected function getValidUserEntity()
+    protected function getValidUserEntity(): User
     {
         return (new User)
             ->setEmail('johndoe@example.com')
@@ -54,15 +55,30 @@ class KernelTestCase extends BaseKernelTestCase
     }
 
     /**
-     * Create a new wishlist entity with valid values
+     * Create a new Wish entity with valid values
      *
      * @return WishList
      */
-    protected function getValidWishListEntity()
+    protected function getValidWishListEntity(): WishList
     {
         return (new WishList)
             ->setTitle('Title test')
             ->setDescription('Just a simple description to test the entity.');
+    }
+
+    /**
+     * Create a new WishList entity with valid values
+     *
+     * @return Wish
+     */
+    protected function getValidWishEntity(): Wish
+    {
+        return (new Wish)
+            ->setName('Name test')
+            ->setDescription('Just a simple description to test the entity.')
+            ->setPrice(1000.23)
+            ->setUrl('https://www.domain.com/img/1.jpg')
+            ->setImage('image_name.jpg');
     }
 
     protected function teardown(): void

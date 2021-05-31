@@ -21,21 +21,26 @@ class Wish
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez choisir un titre pour votre souhait.")
+     * @Assert\Length(max=255,maxMessage="Veuillez choisir un titre moins long.")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(max=255,maxMessage="Veuillez choisir une description moins long.")
      */
     private $description;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
+     * @Assert\Regex(pattern="/^([\d]{1,8}[\.][\d]{1,2})$|^[\d]{1,10}$/",message="Veuillez saisir un prix valide (utiliser le point pour les decimales).")
      */
     private $price;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Url(message="Veuillez saisir une url valide.")
      */
     private $url;
 
