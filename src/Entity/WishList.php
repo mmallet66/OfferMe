@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\WishListRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -32,6 +34,22 @@ class WishList
      */
     private $description;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Wish::class, mappedBy="wishlist", orphanRemoval=true)
+     */
+    private $wishes;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="wishLists")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
+    public function __construct()
+    {
+        $this->wishes = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -57,6 +75,48 @@ class WishList
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Wish[]
+     */
+    public function getWishes(): Collection
+    {
+        return $this->wishes;
+    }
+
+    public function addWish(Wish $wish): self
+    {
+        if (!$this->wishes->contains($wish)) {
+            $this->wishes[] = $wish;
+            $wish->setWishlist($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWish(Wish $wish): self
+    {
+        if ($this->wishes->removeElement($wish)) {
+            // set the owning side to null (unless already changed)
+            if ($wish->getWishlist() === $this) {
+                $wish->setWishlist(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
