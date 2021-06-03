@@ -35,7 +35,7 @@ class WishList
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity=Wish::class, mappedBy="wishlist", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Wish::class, mappedBy="wishlist", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $wishes;
 

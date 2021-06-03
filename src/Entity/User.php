@@ -70,7 +70,7 @@ class User implements UserInterface
     private $isVerified = false;
 
     /**
-     * @ORM\OneToMany(targetEntity=WishList::class, mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=WishList::class, mappedBy="user", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $wishLists;
 
