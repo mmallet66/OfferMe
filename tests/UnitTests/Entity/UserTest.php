@@ -21,11 +21,15 @@ class UserTest extends KernelTestCase
     private const LASTNAME_LENGTH_CONSTRAINT_MESSAGE = "Votre nom doit contenir moins de 50 caractères.";
     
     private const LASTNAME_REGEX_CONSTRAINT_MESSAGE = "Votre nom ne peut contenir que des lettres, espaces ou trait d'union (-).";
+    
+    private const PASSWORD_NOT_BLANK_CONSTRAINT_MESSAGE = "Veuillez définir votre mot de passe.";
+    
+    private const PASSWORD_REGEX_CONSTRAINT_MESSAGE = "Veuillez saisir un mot de passe valide.";
 
     private const UNIQUE_ENTITY_CONSTRAINT_MESSAGE = "Cette adresse email est déjà utilisée.";
 
     /** @test */
-    public function user_is_valid()
+    public function user_is_valid(): void
     {
         $user = $this->getValidUserEntity();
         $this->assertHasError($user, 0);
@@ -46,7 +50,7 @@ class UserTest extends KernelTestCase
     }
 
     /** @test */
-    public function user_is_invalid_because_no_email_entered()
+    public function user_is_invalid_because_no_email_entered(): void
     {
         $user = $this->getValidUserEntity()->setEmail('');
         $error = $this->assertHasError($user);
@@ -54,7 +58,7 @@ class UserTest extends KernelTestCase
     }
 
     /** @test */
-    public function user_is_invalid_because_email_entered_is_invalid()
+    public function user_is_invalid_because_email_entered_is_invalid(): void
     {
         $user = $this->getValidUserEntity()->setEmail('johnDoe@example');
         $error = $this->assertHasError($user);
@@ -62,7 +66,7 @@ class UserTest extends KernelTestCase
     }
 
     /** @test */
-    public function user_is_invalid_because_no_firstname_entered()
+    public function user_is_invalid_because_no_firstname_entered(): void
     {
         $user = $this->getValidUserEntity()->setFirstname('');
         $error = $this->assertHasError($user);
@@ -70,7 +74,7 @@ class UserTest extends KernelTestCase
     }
 
     /** @test */
-    public function user_is_invalid_because_firstname_must_be_less_than_50_characters()
+    public function user_is_invalid_because_firstname_must_be_less_than_50_characters(): void
     {
         $moreThan50Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $user = $this->getValidUserEntity()->setFirstname($moreThan50Chars);
@@ -79,7 +83,7 @@ class UserTest extends KernelTestCase
     }
 
     /** @test */
-    public function user_is_invalid_because_firstname_does_not_contain_only_letters_or_hyphen_or_space()
+    public function user_is_invalid_because_firstname_does_not_contain_only_letters_or_hyphen_or_space(): void
     {
         $user1 = $this->getValidUserEntity()->setFirstname('Jean-Pierre');
         $this->assertHasError($user1, 0);
@@ -95,7 +99,7 @@ class UserTest extends KernelTestCase
     }
 
     /** @test */
-    public function user_is_invalid_because_no_lastname_entered()
+    public function user_is_invalid_because_no_lastname_entered(): void
     {
         $user = $this->getValidUserEntity()->setLastname('');
         $error = $this->assertHasError($user);
@@ -103,7 +107,7 @@ class UserTest extends KernelTestCase
     }
 
     /** @test */
-    public function user_is_invalid_because_lastname_must_be_less_than_50_characters()
+    public function user_is_invalid_because_lastname_must_be_less_than_50_characters(): void
     {
         $moreThan50Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $user = $this->getValidUserEntity()->setLastname($moreThan50Chars);
@@ -112,7 +116,7 @@ class UserTest extends KernelTestCase
     }
 
     /** @test */
-    public function user_is_invalid_because_lastname_does_not_contain_only_letters_or_hyphen_or_space()
+    public function user_is_invalid_because_lastname_does_not_contain_only_letters_or_hyphen_or_space(): void
     {
         $user1 = $this->getValidUserEntity()->setLastname('Jean-Pierre');
         $this->assertHasError($user1, 0);
@@ -124,11 +128,39 @@ class UserTest extends KernelTestCase
         $user3 = $this->getValidUserEntity()->setLastname('Jean1');
         $error = $this->assertHasError($user3);
         $this->assertSame(self::LASTNAME_REGEX_CONSTRAINT_MESSAGE, $error);
-
     }
 
     /** @test */
-    public function user_must_be_unique()
+    public function user_is_invalid_because_no_password_entered(): void
+    {
+        $user = $this->getValidUserEntity()->setPassword('');
+        $error = $this->assertHasError($user);
+        $this->assertSame(self::PASSWORD_NOT_BLANK_CONSTRAINT_MESSAGE, $error);
+    }
+
+    /**
+     * @dataProvider invalid_password_provider
+     * @test
+     */
+    public function user_is_invalid_because_password_entered_is_invalid(string $invalidPassword): void
+    {
+        $user = $this->getValidUserEntity()->setPassword($invalidPassword);
+        $error = $this->assertHasError($user);
+        $this->assertSame(self::PASSWORD_REGEX_CONSTRAINT_MESSAGE, $error);
+    }
+
+    public function invalid_password_provider()
+    {
+        yield 'less than one number' => ['!IPassword'];
+        yield 'less than one lowercase character' => ['!1PASSWORD'];
+        yield 'less than one uppercase character' => ['!1password'];
+        yield 'less than one special character' => ['i1Password'];
+        yield 'less than 8 characters' => ['!1Passw'];
+        yield 'greater than 16 characters' => ['!1Passwordpasswor'];
+    }
+
+    /** @test */
+    public function user_must_be_unique(): void
     {
         $user1 = $this->getValidUserEntity();
         $this->em->persist($user1);
