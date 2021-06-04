@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Entity;
+namespace App\Tests\UnitTests\Entity;
 
 use App\Tests\Framework\KernelTestCase;
 use Generator;
