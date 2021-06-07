@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/inscription", name="security_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $em): Response
     {
         $user = new User;
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -29,7 +30,6 @@ class SecurityController extends AbstractController
                 )
             );
 
-            $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
 
