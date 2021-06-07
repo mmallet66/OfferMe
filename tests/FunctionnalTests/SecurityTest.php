@@ -10,7 +10,7 @@ use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class RegistrationTest extends WebTestCase
+class SecurityTest extends WebTestCase
 {
     /** @var KernelBrowser */
     private $client;
@@ -24,7 +24,7 @@ class RegistrationTest extends WebTestCase
     protected function setUp(): void
     {
         $this->client = static::createClient();
-        $this->crawler = $this->client->request("GET", "/register");
+        $this->crawler = $this->client->request("GET", "/inscription");
         $this->registrationForm = $this->crawler->selectButton("S'inscrire")->form();
     }
 
