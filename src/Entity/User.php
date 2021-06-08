@@ -30,15 +30,20 @@ class User implements UserInterface
      * @Assert\Email(message = "Veuillez saisir une adresse email valide.")
      */
     private $email;
-
+    
     /**
      * @ORM\Column(type="json")
      */
     private $roles = [];
-
+    
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Veuillez définir votre mot de passe.")
+     * @Assert\Regex(
+     *      pattern="/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/",
+     *      message="Veuillez saisir un mot de passe valide."
+     * )
      */
     private $password;
 

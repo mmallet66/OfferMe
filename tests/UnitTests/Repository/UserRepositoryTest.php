@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Repository;
+namespace App\Tests\UnitTests\Repository;
 
 use App\Entity\User;
 use App\Entity\WishList;
