@@ -10,6 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class SecurityTest extends WebTestCase
 {
+    private const REGISTRATION_ROUTE = '/inscription';
+
+    private const CONNECTION_ROUTE = '/connexion';
+
     /** @var KernelBrowser */
     private $client;
 
@@ -23,7 +27,7 @@ class SecurityTest extends WebTestCase
 
     public function registerNewUser()
     {
-        $crawler = $this->client->request('GET', '/inscription');
+        $crawler = $this->client->request('GET', self::REGISTRATION_ROUTE);
         $registrationForm = $crawler->selectButton('S\'inscrire')->form();
 
         $this->client->submit($registrationForm, [
@@ -44,7 +48,7 @@ class SecurityTest extends WebTestCase
      */
     public function registration_form_is_good($formField): void
     {
-        $crawler = $this->client->request('GET', '/inscription');
+        $crawler = $this->client->request('GET', self::REGISTRATION_ROUTE);
         $registrationForm = $crawler->selectButton('S\'inscrire')->form();
 
         $this->assertTrue(
@@ -71,7 +75,7 @@ class SecurityTest extends WebTestCase
      */
     public function login_form_is_good($formField): void
     {
-        $crawler = $this->client->request('GET', '/connexion');
+        $crawler = $this->client->request('GET', self::CONNECTION_ROUTE);
         $loginForm = $crawler->selectButton('Se connecter')->form();
 
         $this->assertTrue(
@@ -111,7 +115,7 @@ class SecurityTest extends WebTestCase
     {
         $this->registerNewUser();
         
-        $crawler = $this->client->request('GET', '/connexion');
+        $crawler = $this->client->request('GET', self::CONNECTION_ROUTE);
         $loginForm = $crawler->selectButton('Se connecter')->form([
             'email' => 'johndoe@example.com',
             'password' => '1!Secret'
@@ -136,7 +140,7 @@ class SecurityTest extends WebTestCase
     {
         $this->registerNewUser();
         
-        $crawler = $this->client->request('GET', '/connexion');
+        $crawler = $this->client->request('GET', self::CONNECTION_ROUTE);
         $loginForm = $crawler->selectButton('Se connecter')->form([
             'email' => 'johndoe@example.com',
             'password' => 'Bad Password'
@@ -144,6 +148,6 @@ class SecurityTest extends WebTestCase
 
         $this->client->submit($loginForm);
         $this->client->followRedirects();
-        $this->assertResponseRedirects('/connexion', 302);
+        $this->assertResponseRedirects(self::CONNECTION_ROUTE, 302);
     }
 }
