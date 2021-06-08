@@ -32,6 +32,7 @@ class RouterTest extends WebTestCase
     public function provideRoute(): Generator
     {
         yield '"/connexion"' => ["/connexion"];
+        yield '"/deconnexion"' => ["/deconnexion"];
         yield '"/inscription"' => ["/inscription"];
     }
 }
