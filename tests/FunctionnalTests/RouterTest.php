@@ -21,13 +21,17 @@ class RouterTest extends WebTestCase
         try {
             $this->assertResponseIsSuccessful();
         } catch (ExpectationFailedException $e) {
-            throw new \Exception("Failed asserting that route path \"$route\" is available.");
-            
+            try {
+                $this->assertResponseRedirects();
+            } catch (ExpectationFailedException $e) {
+                throw new \Exception("Failed asserting that route path \"$route\" is available.");
+            }
         }
     }
 
     public function provideRoute(): Generator
     {
+        yield '"/connexion"' => ["/connexion"];
         yield '"/inscription"' => ["/inscription"];
     }
 }

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
@@ -33,8 +34,7 @@ class SecurityController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            /** @todo Replace route to redirect to login */
-            return $this->redirectToRoute('security_registration_success');
+            return $this->redirectToRoute('security_login');
         }
 
         return $this->render('security/register.html.twig', [
@@ -43,10 +43,18 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/register-success",name="security_registration_success")
+     * @Route("/connexion", name="security_login")
      */
-    public function success()
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        dd("It's working...");
+        /** @todo Redirect to user profile */
+        // if ($this->getUser()) {
+        //     return $this->redirectToRoute('route vers le profil utilisateur');
+        // }
+
+        $error = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 }
