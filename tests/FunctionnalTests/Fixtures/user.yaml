@@ -1,0 +1,6 @@
+App\Entity\User:
+  user:
+    email: "johndoe\\@example.com"
+    password: "\\$argon2id\\$v=19\\$m=65536,t=4,p=1\\$KyGYI4CvRbk0sSK8ZfiF/Q\\$jWqNqz+6/R5zvwmkdOEXlnSQNBiUcjm8YN5KvM9ovRY"
+    firstname: John
+    lastname: DOE
