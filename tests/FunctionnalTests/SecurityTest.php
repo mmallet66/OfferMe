@@ -124,15 +124,7 @@ class SecurityTest extends WebTestCase
         $this->client->submit($loginForm);
         $this->client->followRedirects();
 
-        echo("
-\e[43;30m⚠ TODO ⚠  \e[39;49m
-\e[43;30mUpdate redirection route when it will be created in :\e[39;49m
-\e[43;30m|-> App\Tests\FunctionnalTests\SecurityTest::we_can_sign_in_with_good_credentials\e[39;49m
-\e[43;30m|-> App\Security\UserAuthenticator::onAuthenticationSuccess\e[39;49m
-");
-        /** @todo Update redirection route when it will be created */
-        // $this->assertResponseRedirects('/blabla', 302);
-        $this->assertResponseRedirects();
+        $this->assertResponseRedirects('/profil', 302);
     }
 
     /** @test */

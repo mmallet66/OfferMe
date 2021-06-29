@@ -34,5 +34,6 @@ class RouterTest extends WebTestCase
         yield '"/connexion"' => ["/connexion"];
         yield '"/deconnexion"' => ["/deconnexion"];
         yield '"/inscription"' => ["/inscription"];
+        yield '"/profil"' => ["/profil"];
     }
 }
